@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>RESTful 직원 관리</title>
+</head>
+<body>
+<h2>직원 등록 (POST /emp)</h2>
+<form id="addForm">
+    <input type="number" name="empno" placeholder="사번" required>
+    <input type="text" name="ename" placeholder="이름" required>
+    <input type="text" name="job" placeholder="직무" required>
+    <button type="submit">등록</button>
+</form>
+
+<hr>
+
+<h2>직원 직무 수정 (PUT /emp/{empno})</h2>
+<form id="updateForm">
+    <input type="number" name="empno" placeholder="사번" required>
+    <input type="text" name="job" placeholder="새 직무" required>
+    <button type="submit">수정</button>
+</form>
+
+<hr>
+
+<h2>직원 삭제 (DELETE /emp/{empno})</h2>
+<form id="deleteForm">
+    <input type="number" name="empno" placeholder="사번" required>
+    <button type="submit">삭제</button>
+</form>
+
+<script>
+    // 직원 추가
+    document.getElementById("addForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+        const data = new FormData(e.target);
+        const params = new URLSearchParams(data);
+        fetch("/emp", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: params
+        })
+            .then(res => res.text())
+            .then(msg => alert(msg));
+    });
+
+    // 직원 수정
+    document.getElementById("updateForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+        const data = new FormData(e.target);
+        const empno = data.get("empno");
+        const job = data.get("job");
+        fetch(`/emp/${empno}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: new URLSearchParams({ job })
+        })
+            .then(res => res.text())
+            .then(msg => alert(msg));
+    });
+
+    // 직원 삭제
+    document.getElementById("deleteForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+        const data = new FormData(e.target);
+        const empno = data.get("empno");
+        fetch(`/emp/${empno}`, {
+            method: "DELETE"
+        })
+            .then(res => res.text())
+            .then(msg => alert(msg));
+    });
+</script>
+</body>
+</html>

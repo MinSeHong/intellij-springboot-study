@@ -14,6 +14,7 @@ public class ApiController {
         return new User("홍길동", 25);
     }
 
+
     @Getter
     @Setter
     static class User {
